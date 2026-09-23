@@ -6,12 +6,12 @@ Fill in every field below before your first commit. This file is how instructors
 
 | Field | Your Answer |
 |-------|-------------|
-| Full Name | |
-| GitHub Username | |
-| Email Address | |
-| Phone / WhatsApp | |
+| Full Name |Eric Ebere Ibeh |
+| GitHub Username |eric4q |
+| Email Address |je658426@gmail.com |
+| Phone / WhatsApp |09060572687 |
 | Cohort | Havilah Club Internship — Cohort |
-| Programme Start Date | |
+| Programme Start Date |7th September |
 | LinkedIn Profile | |
 
 ---
