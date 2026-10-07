@@ -14,6 +14,15 @@ OUTPUT_FILE = "data/output.csv"
 def load_data(filepath):
     rows = []
     # TODO: open the file and read rows into the list
+    file = open(filepath, "r")
+    reader = csv.DictReader(file)
+ 
+    for row in reader:
+        row["name"] = row["name"].strip()
+        row["score"] = int(row["score"])
+        rows.append(row)
+ 
+    file.close()
     return rows
 
 
@@ -23,7 +32,20 @@ def load_data(filepath):
 
 def print_summary(rows):
     # TODO: implement summary statistics
-    pass
+    total_rows = len(rows)
+ 
+    scores = []
+    for row in rows:
+        scores.append(row["score"])
+ 
+    minimum_score = min(scores)
+    maximum_score = max(scores)
+    average_score = sum(scores) / len(scores)
+ 
+    print("Total Records:", total_rows)
+    print("Minimum Score:", minimum_score)
+    print("Maximum Score:", maximum_score)
+    print("Average Score:", average_score)
 
 
 # ── Step 3: Filter Data ───────────────────────────────────────────────────────
@@ -33,7 +55,13 @@ def print_summary(rows):
 def filter_data(rows):
     filtered = []
     # TODO: define and apply your filter condition
+    for row in rows:
+        if row["score"] > 70:
+            filtered.append(row)
     return filtered
+
+def get_score(row):
+    return row["score"]
 
 
 # ── Step 4: Sort and Export ───────────────────────────────────────────────────
@@ -41,7 +69,16 @@ def filter_data(rows):
 
 def save_data(rows, filepath):
     # TODO: sort rows by a column, then write to CSV
-    pass
+    sorted_rows = sorted(rows, key=get_score)
+ 
+    file = open(filepath, "w", newline="")
+    writer = csv.DictWriter(file, fieldnames=["name", "score", "grade"])
+    writer.writeheader()
+ 
+    for row in sorted_rows:
+        writer.writerow(row)
+ 
+    file.close()
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────

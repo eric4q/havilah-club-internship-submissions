@@ -8,8 +8,10 @@ import os
 
 # Load your API key from the environment (never hardcode it here).
 # Copy .env.example to .env and fill in your key before running.
-API_KEY = os.getenv("API_KEY", "")
-BASE_URL = ""  # TODO: set your chosen API's base URL
+# Adzuna needs two values, not one, so both are loaded here.
+APP_ID = os.getenv("ADZUNA_APP_ID", "")
+APP_KEY = os.getenv("ADZUNA_APP_KEY", "")
+BASE_URL = "https://api.adzuna.com/v1/api/jobs/gb/search/1"
 
 
 # ── Step 1: Fetch Data ────────────────────────────────────────────────────────
@@ -17,9 +19,28 @@ BASE_URL = ""  # TODO: set your chosen API's base URL
 # Handle network errors and non-200 status codes gracefully.
 
 def fetch_data(query):
-    # TODO: build params dict and call requests.get()
-    # TODO: check response.status_code before calling .json()
-    pass
+    params = {
+        "app_id": APP_ID,
+        "app_key": APP_KEY,
+        "what": query,
+        "where": "london",
+        "results_per_page": 5,
+    }
+
+    try:
+        response = requests.get(BASE_URL, params=params)
+    except requests.exceptions.RequestException as error:
+        print("Network error:", error)
+        return None
+
+    print("Status Code:", response.status_code)
+
+    if response.status_code != 200:
+        print("The API request was not successful.")
+        return None
+
+    data = response.json()
+    return data
 
 
 # ── Step 2: Parse and Display ─────────────────────────────────────────────────
@@ -27,8 +48,19 @@ def fetch_data(query):
 # Print them in a clear, labelled format — not raw JSON.
 
 def display_results(data):
-    # TODO: navigate the JSON structure and print each field with a label
-    pass
+    results = data["results"]
+    print("Total jobs found:", data["count"])
+    print()
+
+    for job in results:
+        title = job["title"]
+        company = job["company"]["display_name"]
+        location = job["location"]["display_name"]
+
+        print("Job Title:", title)
+        print("Company:", company)
+        print("Location:", location)
+        print("-----")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
